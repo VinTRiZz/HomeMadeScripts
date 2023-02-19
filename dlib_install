@@ -1,0 +1,29 @@
+#! /bin/bash
+
+# Say hello
+echo "This is a install script for dlip library, made for neural net technologies.";
+sleep 5s;
+
+# Prepare
+apt install libavdevice-dev -y &&
+apt install libavfilter-dev libavformat-dev -y &&
+apt install libavcodec-dev libswresample-dev libswscale-dev -y &&
+apt install libavutil-dev -y;
+
+# get source
+mkdir dlib_temp &&
+cd dlib_temp &&
+git clone https://github.com/davisking/dlib.git &&
+cd dlib &&
+mkdir build &&
+cd build &&
+cmake ../ &&
+sudo make install;
+
+#cleanup
+cd ../; cd ../; cd ../;
+sudo rm dlib_temp;
+
+# Say that's script finished
+echo "";
+echo "Okay I've finished my work. If there's error here satisfy it";
