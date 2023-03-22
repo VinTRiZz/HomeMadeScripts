@@ -1,0 +1,87 @@
+#! /bin/bash
+
+MCU_FAMILY="F4"
+PACKAGE_VERSION="v1.27.1"
+CURRENT_DIRECTORY="$(pwd)"
+logfile="$HOME/stm32firmware_update.log"
+
+echo "Welcome to firmware installation script!"
+echo "Logs can be found here:"
+echo "$logfile"
+
+echo "================================================" > "$logfile"
+echo "=====Firmware script log file from $(date) =====" >> "$logfile"
+
+if ! test 7z
+then
+echo "Error: you need to have 7z for unzipping packages. You want to install it? [y/n]"
+install_answer="y"
+read -p "<your input --> " install_answer
+
+if test "$install_answer" == "n"
+then
+echo "Not able to update packages. Edit script to use other archive manager"
+else
+sudo apt install 7zip
+fi
+fi
+
+
+# Prepare
+# What family
+echo "Enter MCU family (F4 is default)"
+echo "Example: STM32F407G-Discovery ------> $MCU_FAMILY"
+read -p "<your input--> " MCU_FAMILY
+
+# What version
+echo "Now enter version of package you interested"
+echo "Example: $PACKAGE_VERSION"
+read -p  "<your input--> " PACKAGE_VERSION
+
+echo "Your choise: STM32$MCU_FAMILY $PACKAGE_VERSION"
+
+# Make temp dir
+echo "Making work dir..."
+{
+mkdir "stm32firmwarePackage"
+cd    "stm32firmwarePackage"
+} 2>> "$logfile"
+
+# Download for package
+echo "Downloading package..."
+{
+# Example:
+# https://github.com/STMicroelectronics/STM32CubeF4/archive/refs/tags/v1.27.1.zip
+wget "https://github.com/STMicroelectronics/STM32Cube$MCU_FAMILY/archive/refs/tags/$PACKAGE_VERSION.zip" -P "$(pwd)"
+} 2>> "$logfile"
+
+# Wait cycle
+until [[ -z `jobs|grep -E -v 'Done|Terminated'` ]]; do
+  sleep 0.05;
+done
+
+
+# Unzip package
+echo "Unzipping package..."
+{
+mv *.zip "STM32Cube_FW_$MCU_FAMILY $PACKAGE_VERSION.zip"
+mkdir "STM32Cube_FW_$MCU_FAMILY $PACKAGE_VERSION"
+cd  "STM32Cube_FW_$MCU_FAMILY $PACKAGE_VERSION"
+7z e "../*.zip" -y
+} &>> "$logfile"
+
+# Move result
+echo "Moving result..."
+{
+cd ..
+mv $(pwd)/* "$HOME/STM32Cube/Repository"
+} 2>> "$logfile"
+
+# Echo end of operations
+echo "Work complete. See logs here:"
+echo "$logfile"
+
+cd "$CURRENT_DIRECTORY"
+rm -R stm32firmwarePackage
+
+exit 0
