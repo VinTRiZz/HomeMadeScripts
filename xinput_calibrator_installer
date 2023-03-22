@@ -1,0 +1,106 @@
+#! /bin/bash
+
+install_log="$HOME/xinput_calibrator_install_log.log"
+
+echo "Welcome to installation script for xinput calibrator!"
+echo "Logs can be found here:"
+echo "$install_log"
+
+# Prepare
+echo "Preparing..."
+{
+echo "LOG: Making directory..." >> "$install_log" 
+wdir="download_temp"
+mkdir "$wdir"; cd "$wdir"
+} 2>> "$install_log"
+
+
+# 1: Download xinput_calibrator
+echo "Downloading calibrator archive..."
+{
+echo "LOG: Downloading file..." >> "$install_log"
+wget http://github.com/downloads/tias/xinput_calibrator/xinput_calibrator-0.7.5.tar.gz
+} &>> "$install_log"
+
+
+# 2: Unzip
+echo "Unzip archive..."
+{
+tar -zxvf xinput_calibrator-0.7.5.tar.gz
+} &>> "$install_log"
+
+
+# 3: Go to calibrator dir
+{
+cd "xinput_calibrator-0.7.5"
+} 2>> "$install_log"
+
+
+# 5: Install dependencies
+echo "Installing depends..."
+{
+sudo apt-get install libx11-dev libxext-dev libxi-dev x11proto-input-dev
+} 2>> "$install_log"
+
+
+# 6: Install xinput_calibrator
+echo "Installing...
+"
+{
+chmod +x configure
+./configure
+make
+sudo make install
+} 2>> "$install_log"
+
+
+# 7: Fin
+answer="y"
+echo "
+Installation ended. Want to start calibrator? [y/n]"
+read -p ">>> " answer
+
+if [ "$answer" == "y" ]
+then
+echo "
+Starting..."
+{
+sudo xinput_calibrator &
+} 2>> "$install_log"
+else
+echo "
+You choose to not start calibrator."
+fi
+
+# 8: Clear garbage
+echo "Clearing garbage..."
+{
+cd ..; cd ..
+rm -R "$wdir"
+} 2>> "$install_log"
+
+# 9: Use calibration result
+echo "
+
+Calibration ended. Do you want to continue? [y/n]"
+read -p ">>> " answer
+
+if [ "$answer" == "y" ]
+then
+echo "
+Creating directories..."
+{
+sudo mkdir /etc/X11/xorg.conf.d
+sudo touch /etc/X11/xorg.conf.d/99-calibration.conf
+} 2>> "$install_log"
+else
+echo "
+Ending..."
+exit (0)
+fi
+
+echo "Now copy the calibration result into the file:"
+echo "/etc/X11/xorg.conf.d/99-calibration.conf"
+echo "
+Then reboot and enjoy
+"
