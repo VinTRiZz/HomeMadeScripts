@@ -1,0 +1,45 @@
+#! /bin/bash
+
+power_percent=100
+
+echo "Выберите процент от максимальной частоты:"
+read -p ">>> " power_percent
+
+if (($power_percent > 0))
+then
+	if (($power_percent < 100))
+	then
+	echo "Вы выбрали процент: $power_percent"
+	else
+	echo "Слишком много!"
+	exit 0
+	fi
+else
+echo "Слишком мало!"
+exit 0
+fi
+
+echo "Устанавливаю значения..."
+
+power_max=0
+for ((i=0;i<99;i++))
+do
+{
+	# Read power1_cap_max as max value can be
+	# power1_cap_max
+	if [ -f /sys/class/drm/card$i/device/hwmon/hwmon*/power1_cap ]
+	then
+	read power_max < /sys/class/drm/card$i/device/hwmon/hwmon*/power1_cap_max
+
+	echo "Got value: $power_max from card: $i"
+	# Calculate
+	power_max=$(expr $power_max \* $power_percent \/ 100)
+
+	echo "Setting new value: $power_max"
+
+	# Set
+	echo $power_max > /sys/class/drm/card"$i"/device/hwmon/hwmon*/power1_cap
+	fi
+	power_max=0
+} 2> "gpu_setup_log".log
+done
