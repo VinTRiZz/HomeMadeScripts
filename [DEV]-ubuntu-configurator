@@ -1,0 +1,101 @@
+#! /bin/bash
+
+# Presets
+logfile="ubuntu-configurator.log"
+
+# Welcome
+echo "Welcome to configurator. it will configure Ubuntu for working.
+All logs can be found later in file:
+$logfile
+Now you will be provided to choose what to install and configure"
+
+start_config="n"
+echo "Start configuring Ubuntu?[y/n]"
+read -p ">>> " start_config
+if test $start_config == "n"
+then
+echo "You chosed to not start the configuration script."
+exit 0
+fi
+
+
+
+echo "===========================================================
+Start of script
+===========================================================" > $logfile
+
+# Settings
+dev_tools="n"
+wine_tools="n"
+
+
+
+read -p "Dev tools? [y/n]
+" dev_tools
+read -p "Wine tools? [y/n]
+" wine_tools
+
+
+echo "Pending updates..."
+{
+    echo "======================="
+    echo "Pending updates"
+    echo "======================="
+    sudo apt update
+    sudo apt upgrade
+} &>> $logfile
+
+
+
+# Dev tools
+if test $dev_tools == "y"
+then
+    echo "Installing preferred dev tools:"
+    {
+    echo "======================="
+    echo "Installing dev tools"
+    echo "======================="
+
+        echo "Code::Blocks"
+        echo "======================="
+        echo "Installing Code::Blocks"
+        echo "======================="
+            sudo apt install codeblocks
+
+
+    } &>> $logfile
+fi
+
+
+
+# Wine tools
+if test $wine_tools == "y"
+then
+    echo "Installing wine tools..."
+    {
+    echo "======================="
+    echo "Installing wine tools"
+    echo "======================="
+
+        echo "======================="
+        echo "Installing wine"
+        echo "======================="
+            sudo apt install wine
+
+        echo "======================="
+        echo "Installing winetricks"
+        echo "======================="
+            sudo apt install winetricks
+
+        echo "======================="
+        echo "Installing Portproton"
+        echo "======================="
+            mkdir portproton_downloads
+            cd portproton_downloads
+            wget -c "https://github.com/Castro-Fidel/PortWINE/raw/master/portwine_install_script/PortProton_1.0" && sh PortProton_1.0 1> /dev/null
+            sudo dpkg --add-architecture i386 && sudo add-apt-repository multiverse && sudo apt update && sudo apt upgrade
+            sudo apt install curl file libc6 libnss3 policykit-1 xz-utils zenity bubblewrap curl icoutils tar libvulkan1 libvulkan1:i386 wget zenity zstd cabextract xdg-utils openssl bc libgl1-mesa-glx libgl1-mesa-glx:i386
+            cd ..
+            sudo rm -R portproton_downloads
+    } &>> $logfile
+fi
