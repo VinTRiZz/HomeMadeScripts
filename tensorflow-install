@@ -3,25 +3,46 @@
 # Constants
 
 # GPU supported
-# download_ref="https://storage.googleapis.com/tensorflow/libtensorflow/libtensorflow-gpu-linux-x86_64-2.11.0.tar.gz"
+download_ref_gpu_sup="https://storage.googleapis.com/tensorflow/libtensorflow/libtensorflow-gpu-linux-x86_64-2.11.0.tar.gz"
 
 # Only CPU
-download_ref="https://storage.googleapis.com/tensorflow/libtensorflow/libtensorflow-cpu-linux-x86_64-2.11.0.tar.gz"
+download_ref_cpu_only="https://storage.googleapis.com/tensorflow/libtensorflow/libtensorflow-cpu-linux-x86_64-2.11.0.tar.gz"
 
 temp_dir="tf_install"
 
 echo "Installation script started"
+
+if test -e /usr/local/include/tensorflow
+then
+echo "Tensorflow is already installed!"
+exit 0
+fi
 
 {
 mkdir "$temp_dir";
 cd "$temp_dir";
 } 2>/dev/null
 
+answer="cpu"
+echo "What version you want to install, CPU only or GPU supported?[cpu/gpu]"
+read -p ">>> " answer
 
+
+if test $answer == "cpu"
+then
+echo "You chosed CPU only version"
 echo "Downloading file...";
 {
-wget "$download_ref";
+wget "$download_ref_cpu_only";
 } &>/dev/null
+else
+echo "You chosed GPU supported version"
+echo "Downloading file...";
+{
+wget "$download_ref_gpu_sup";
+} &>/dev/null
+fi
+exit 0
 
 # Wait cycle for downloading
 until [[ -z `jobs|grep -E -v 'Done|Terminated'` ]]
