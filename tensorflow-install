@@ -1,0 +1,56 @@
+#! /bin/bash
+
+# Constants
+
+# GPU supported
+# download_ref="https://storage.googleapis.com/tensorflow/libtensorflow/libtensorflow-gpu-linux-x86_64-2.11.0.tar.gz"
+
+# Only CPU
+download_ref="https://storage.googleapis.com/tensorflow/libtensorflow/libtensorflow-cpu-linux-x86_64-2.11.0.tar.gz"
+
+temp_dir="tf_install"
+
+echo "Installation script started"
+
+{
+mkdir "$temp_dir";
+cd "$temp_dir";
+} 2>/dev/null
+
+
+echo "Downloading file...";
+{
+wget "$download_ref";
+} &>/dev/null
+
+# Wait cycle for downloading
+until [[ -z `jobs|grep -E -v 'Done|Terminated'` ]]
+do
+     sleep 0.2;
+done
+
+mkdir unpacked
+cd unpacked
+
+if test -e ./*.tar.gz
+then
+echo "Unpacking file..."
+mkdir unpacked
+cd unpacked
+tar -xGpf ../*.tar.gz
+
+echo "Moving files (need su permission)..."
+sudo mv ./lib/* /usr/local/lib
+sudo mv ./include/* /usr/local/include
+
+echo "Linking..."
+sudo ldconfig /usr/local/lib
+else
+echo "Error downloading file"
+fi
+echo "Clean-up"
+pwd
+cd ../../
+sudo rm -R $temp_dir
+
+echo "Complete"
