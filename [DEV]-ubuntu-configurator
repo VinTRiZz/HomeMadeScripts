@@ -27,13 +27,15 @@ Start of script
 # Settings
 dev_tools="n"
 wine_tools="n"
-
+utils="n"
 
 
 read -p "Dev tools? [y/n]
 " dev_tools
 read -p "Wine tools? [y/n]
 " wine_tools
+read -p "Utils? [y/n]
+" utils
 
 
 echo "Pending updates..."
@@ -60,9 +62,18 @@ then
         echo "======================="
         echo "Installing Code::Blocks"
         echo "======================="
-            sudo apt install codeblocks
+            sudo apt install codeblocks-contrib -y
+            
+	echo "========================"
+	echo "Installing Visual Studio Code"
+	echo "========================"
+	    # TODO: Write what will be
+	    # sudo apt install code -y
 
-
+	echo "========================"
+	echo "Installing cppcheck"
+	echo "========================"
+	    sudo apt install cppcheck -y
     } &>> $logfile
 fi
 
@@ -80,12 +91,12 @@ then
         echo "======================="
         echo "Installing wine"
         echo "======================="
-            sudo apt install wine
+            sudo apt install wine -y
 
         echo "======================="
         echo "Installing winetricks"
         echo "======================="
-            sudo apt install winetricks
+            sudo apt install winetricks -y
 
         echo "======================="
         echo "Installing Portproton"
@@ -95,7 +106,25 @@ then
             wget -c "https://github.com/Castro-Fidel/PortWINE/raw/master/portwine_install_script/PortProton_1.0" && sh PortProton_1.0 1> /dev/null
             sudo dpkg --add-architecture i386 && sudo add-apt-repository multiverse && sudo apt update && sudo apt upgrade
             sudo apt install curl file libc6 libnss3 policykit-1 xz-utils zenity bubblewrap curl icoutils tar libvulkan1 libvulkan1:i386 wget zenity zstd cabextract xdg-utils openssl bc libgl1-mesa-glx libgl1-mesa-glx:i386
+            chmod +x ./*
+            ./*
             cd ..
             sudo rm -R portproton_downloads
     } &>> $logfile
 fi
+
+
+# Utils
+if test $utils == "y"
+then
+	echo "Installing utils"
+	
+{
+	echo "Installing midnight commander"
+	sudo apt install mc # Midnight commander
+} &>> $logfile
+fi
+
+
+
+
