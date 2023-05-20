@@ -1,0 +1,3 @@
+#! /bin/bash
+
+7z -t7z a -p -mhe=on -m0=lzma2 -mx=9 -mfb=64 -md=32m -ms=on importantDocs.7z "Docs for encrypt"/*;

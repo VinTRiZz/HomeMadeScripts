@@ -1,0 +1,6 @@
+#! /bin/bash
+
+pass="no_pass";
+read -p "Password: " -s pass;
+
+7z x -t7z -p$pass importantDocs.7z;
