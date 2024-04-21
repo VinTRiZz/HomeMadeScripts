@@ -1,0 +1,38 @@
+#! /bin/bash
+
+DAY_SUMMARY=./SUMMARY/summary_$(date '+%d.%m.%Y').txt
+
+echo "Data will be saved as $DAY_SUMMARY"
+rm "$DAY_SUMMARY" &> /dev/null # Remove if already exist
+touch "$DAY_SUMMARY"
+mkdir "TIME_BACKUP/$(date '+%d.%m.%Y')"
+
+# Go trough dirs
+DAYS=$(ls -d */ | sed 's/\///')
+for d in ${DAYS[@]}; do
+
+    if [ "$d" == "SUMMARY" ] || [ "$d" == "TIME_BACKUP" ]; then
+        continue
+    else
+        # Use data from dirs
+        echo ""
+        echo "-------------------------------------" | tee -a $DAY_SUMMARY
+        echo "Day [ $d ]" | tee -a $DAY_SUMMARY
+        
+        # Read powers
+        COUNTER=1
+        
+        cp "$d" "TIME_BACKUP/$(date '+%d.%m.%Y')" -R
+        
+        POWER_ON=($(cat ./"$d"/powerOnTime*))
+        POWER_OFF=($(cat ./"$d"/powerOffTime*))
+        
+        for p in ${!POWER_ON[@]}; do
+            echo "[ $COUNTER ] :  TIME ON: [ ${POWER_ON[p]} ]  --  TIME OFF: [ ${POWER_OFF[p]} ]" | tee -a $DAY_SUMMARY
+            ((COUNTER++))
+        done
+        
+        rm "$d" -R
+    fi
+
+done

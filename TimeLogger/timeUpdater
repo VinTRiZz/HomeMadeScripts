@@ -1,0 +1,30 @@
+#! /bin/bash
+
+# Write ON time
+ONFILE="$1/powerOnTime"
+
+FILE_NUMBER=1;
+while [ -e "$ONFILE" ]; do
+    ONFILE="$1/powerOnTime_$FILE_NUMBER"
+    ((FILE_NUMBER++))
+done
+
+echo "$(date '+%H:%M')" > "$ONFILE"
+
+
+
+# Write OFF time
+OFFFILE="$1/powerOffTime"
+
+FILE_NUMBER=1;
+while [ -e "$OFFFILE" ]; do
+    OFFFILE="$1/powerOffTime_$FILE_NUMBER"
+    ((FILE_NUMBER++))
+done
+
+
+# Write loop
+while ((1)); do
+    echo "$(date '+%H:%M')" > "$OFFFILE"
+    sleep 1m
+done

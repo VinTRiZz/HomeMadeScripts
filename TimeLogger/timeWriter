@@ -1,0 +1,35 @@
+#! /bin/bash
+
+clear
+
+LOGFILE="timeWriter.log"
+
+BASEPATH="$0"
+BASEPATH=${BASEPATH%"/$(basename $0)"}
+cd "$BASEPATH";
+
+if [ -e "$LOGFILE" ]; then
+test;
+else
+touch timeWriter.log
+fi
+
+{
+
+    # Check if need to create summary
+    DAYCHECK=$(date '+%d')
+    if [ "$DAYCHECK" == "12" ]; then
+        echo "Today is 12 day of month, creating summary"
+        ./summaryCreator
+    else
+        echo "Today is $DAYCHECK day, summary not able to create"
+    fi
+    
+
+    # Start time writing
+    TODAY="$(date '+%d.%m.%Y')"
+    mkdir ./"$TODAY" 2> /dev/null
+
+    ./timeUpdater $TODAY
+
+} &>> "$LOGFILE"
