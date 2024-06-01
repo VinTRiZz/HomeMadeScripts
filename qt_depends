@@ -6,26 +6,26 @@ echo "========"
 
 echo "[1/6]: Compiler, libs, includes"
 echo "\n\n=======================[1/6]: Compiler, libs, includes==================\n\n" &>logfile.txt
-sudo apt-get install build-essential libgl1-mesa-dev &>>logfile.txt
+sudo apt-get install build-essential libgl1-mesa-dev &>>logfile.txt -y
 
 echo "[2/6]: Graphic libs..."
 echo "\n\n=======================[2/6]: Graphic libs...==================\n\n" &>>logfile.txt
-sudo apt-get install libfontconfig1-dev libfreetype6-dev libx11-dev libxext-dev libxfixes-dev libxi-dev libxrender-dev libxcb1-dev libx11-xcb-dev libxcb-glx0-dev &>>logfile.txt
+sudo apt-get install libfontconfig1-dev libfreetype6-dev libx11-dev libxext-dev libxfixes-dev libxi-dev libxrender-dev libxcb1-dev libx11-xcb-dev libxcb-glx0-dev -y &>>logfile.txt
 
 echo "[3/6]: Additive for some Qt functions..."
 echo "\n\n=======================[3/6]: Additive for some Qt functions...==================\n\n" &>>logfile.txt
-sudo apt-get install libssl-dev libgstreamer-plugins-base1.0-dev libgstreamer1.0-dev libasound2-dev libbz2-dev libgcrypt20-dev libicu-dev libpng-dev libjpeg-dev libsqlite3-dev zlib1g-dev &>>logfile.txt
+sudo apt-get install libssl-dev libgstreamer-plugins-base1.0-dev libgstreamer1.0-dev libasound2-dev libbz2-dev libgcrypt20-dev libicu-dev libpng-dev libjpeg-dev libsqlite3-dev zlib1g-dev -y &>>logfile.txt
 
 echo "[4/6]: Databases..."
 echo "\n\n=======================[4/6]: Databases...==================\n\n" &>>logfile.txt
-sudo apt-get install libmysqlclient-dev libpq-dev unixodbc-dev &>>logfile.txt
+sudo apt-get install libmysqlclient-dev libpq-dev unixodbc-dev -y &>>logfile.txt
 
 echo "[5/6]: Web techs..."
 echo "\n\n=======================[5/6]: Web techs...==================\n\n" &>>logfile.txt
-sudo apt-get install libxml2-dev libxslt1-dev libcurl4-openssl-dev libwebp-dev libopus-dev libavcodec-dev libavformat-dev libswscale-dev libavresample-dev libssl-dev &>>logfile.txt
+sudo apt-get install libxml2-dev libxslt1-dev libcurl4-openssl-dev libwebp-dev libopus-dev libavcodec-dev libavformat-dev libswscale-dev libavresample-dev libssl-dev -y &>>logfile.txt
 
 echo "[6/6]: Multimedia..."
 echo "\n\n=======================[6/6]: Multimedia...==================\n\n" &>>logfile.txt
-sudo apt-get install libpulse-dev libglib2.0-dev libudev-dev libopenal-dev libalut-dev libvulkan-dev &>>logfile.txt
+sudo apt-get install libpulse-dev libglib2.0-dev libudev-dev libopenal-dev libalut-dev libvulkan-dev -y &>>logfile.txt
 
 echo "Installation done"
