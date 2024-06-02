@@ -4,12 +4,12 @@ INSTALLATIONS=(
 
 # Common
 kde-plasma-desktop
-kde-spectacle
-fish
+kde-spectacle   # Screenshotter
+fish            # Shell
 curl
 htop
-testdisk
-ufw
+testdisk        # File restore utility
+thermald        # For processor throttling
 
 # Compilation
 build-essential
@@ -28,8 +28,8 @@ pciutils
 linux-headers-$(uname -r)
 
 # Network
-ufw
-nmap
+ufw     # Firewall
+nmap    # Network scanning
 
 )
 

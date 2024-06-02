@@ -7,6 +7,10 @@ ufw default deny incoming &&
 ufw deny ssh
 echo "Firewall setup complete"
 
+echo "Setting up throttling config for processor"
+cp preparedConfigs/thermal-conf.xml /etc/thermald
+systemctl restart thermald
+echo "Complete"
 
 GITHUB_MAIL="NONE"
 GITHUB_USERNAME="NONE"
