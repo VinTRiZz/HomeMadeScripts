@@ -1,0 +1,16 @@
+#! /bin/bash
+
+echo "Sync..."
+if (sync); then
+echo "Sync complete"
+else
+echo "Sync not complete!"
+exit 1
+fi
+
+if ( sudo umount /mnt ); then
+echo "USB unmounted"
+else
+sudo mount /dev/sdc /mnt
+echo "USB mounted"
+fi

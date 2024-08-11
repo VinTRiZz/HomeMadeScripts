@@ -1,0 +1,12 @@
+ #! /bin/bash
+
+ mkdir TEST
+ mkdir TEST/dir1
+ echo "12345678901234567890" > TEST/1.txt
+ echo "12345678901234567890abcdefg" > TEST/dir1/2.txt
+
+ mkdir TEST2
+ mkdir TEST2/TEST
+ mkdir TEST2/TEST/dir1
+ echo "1234567890123456789012124s" > TEST2/TEST/1.txt
+ echo "12345678901234567890abcdefgefgaga" > TEST2/TEST/dir1/2.txt

@@ -22,6 +22,7 @@ linux-headers-$(uname -r)
 # Coding
 qtcreator
 codeblocks-contrib
+gdb
 
 # Etc
 pciutils

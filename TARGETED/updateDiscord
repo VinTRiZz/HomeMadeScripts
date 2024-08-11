@@ -1,0 +1,23 @@
+#! /bin/bash
+
+echo "Downloading discord"
+
+mkdir temp 2> /dev/null
+cd temp
+
+if (curl -L "https://discord.com/api/download/stable?platform=linux&format=tar.gz" > Discord.tar.gz); then
+echo -en "\r\033[KDownloaded update"
+else
+echo -en "\033[31mError downloading update\033[0m"
+exit 1
+fi
+
+echo -en "\r\033[KUnzipping"
+
+tar -xf *.tar.gz
+rm ../Discord -r
+mv Discord ../Discord
+cd ..
+rm -r temp
+
+echo -en "\r\033[KComplete"

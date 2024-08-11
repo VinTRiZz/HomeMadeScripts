@@ -1,0 +1,11 @@
+#! /bin/bash
+
+echo "Creating SWAP file and enabling it..."
+
+sudo dd if=/dev/zero of=/swapExtern bs=1G count=10
+sudo chmod 600 /swapExtern
+sudo mkswap /swapExtern
+sudo swapon /swapExtern
+sudo swapon --show
+
+echo "Creating SWAP file and enabling it done"

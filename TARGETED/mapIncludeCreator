@@ -1,0 +1,46 @@
+#! /bin/bash
+
+OUTPUT="OUTPUT/gisincludes.h"
+
+HEADERS=($(ls /usr/include/gisdesigner))
+
+# Bad includes
+BAD_HEADERS=(
+"qdmdgtob.h" 
+"visfuncs.h" 
+"s57tomap.h" 
+"xcontext.h" 
+"semkey.inc" 
+"testhelpers.h" 
+"mapdrw.h" 
+"maperrex.h" 
+"dbmapi.h" 
+)
+
+IS_BAD_HEADER="f"
+
+echo -e "#ifndef GISINCLUDES_H\n#define GISINCLUDES_H\n" > "$OUTPUT"
+for h in ${HEADERS[@]}; do
+
+for bh in ${BAD_HEADERS[@]}; do
+    if [ "$h" == "$bh" ] || [ "$IS_BAD_HEADER" == "t" ]; then
+        echo -e "\033[33mFound bad header:\033[0m $bh"
+        IS_BAD_HEADER="t"
+        break
+    fi
+done
+
+# Comment header if it's bad
+if [ "$IS_BAD_HEADER" == "t" ]; then
+    echo -e "// Bad header (cause errors)" >> "$OUTPUT"
+    echo -en "// " >> "$OUTPUT"
+    ((IS_BAD_HEADER="f")) # Reset check variable
+fi
+
+# Write header into file
+echo -e "#include \"gisdesigner/$h\"" >> "$OUTPUT"
+
+done
+
+echo -e "\n#endif // GISINCLUDES_H" >> "$OUTPUT"
+echo "Header file created"

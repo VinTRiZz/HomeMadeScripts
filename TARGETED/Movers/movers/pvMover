@@ -1,0 +1,35 @@
+#! /bin/bash
+
+RESULT_DIR="$2/PhotosVideos"
+mkdir "$RESULT_DIR"
+
+IMAGE_TYPES=(
+"png"
+"jpg"
+"jpeg"
+)
+IMAGE_TYPES_COUNT=${#IMAGE_TYPES[@]}
+COUNTER=1;
+
+for t in ${#IMAGE_TYPES[@]}; do
+echo -en "\r\033[K\033[33m[$COUNTER/$IMAGE_TYPES_COUNT]Moving $t..."
+((COUNTER++))
+
+mv $(find "$1" -iname *".$t") "$RESULT_DIR" &> "../pvMove.log"
+done
+
+
+VIDEO_TYPES=(
+"mp4"
+)
+VIDEO_TYPES_COUNT=${#VIDEO_TYPES[@]}
+COUNTER=1;
+
+for t in ${#VIDEO_TYPES[@]}; do
+echo -en "\r\033[K\033[33m[$COUNTER/$VIDEO_TYPES_COUNT]Moving $t..."
+((COUNTER++))
+
+mv $(find "$1" -iname *".$t") "$RESULT_DIR" &> "../pvMove.log"
+done
+
+echo -e "\r\033[K\033[32mComplete\033[0m";

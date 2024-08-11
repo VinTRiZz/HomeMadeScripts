@@ -3,7 +3,7 @@
         <Type>cpu</Type>
         <TripPoints>
             <TripPoint>
-                <Temperature>75000</Temperature>
+                <Temperature>70000</Temperature>
                 <type>passive</type>
             </TripPoint>
         </TripPoints>

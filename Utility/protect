@@ -1,0 +1,9 @@
+#! /bin/bash
+
+cd $(pwd)
+
+if [ -e "$1" ]; then
+sudo chattr +a -R "$1"
+else
+echo -e "\033[31mОбъекта не существует\033[0m"
+fi

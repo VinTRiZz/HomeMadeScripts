@@ -1,0 +1,83 @@
+#! /bin/bash
+
+# Variables
+INPUT_FILE=$1;
+INPUT_FILE_DIR=$(dirname "$INPUT_FILE");
+INPUT_FILE_NAME=$(basename "$INPUT_FILE");
+OUTPUT_FILE="$INPUT_FILE_DIR/[CLEANED] $INPUT_FILE_NAME";
+MUST_REMOVE_DOUBLE_EMPTY_LINES="n";
+
+##################################################################
+# Argument working
+if test "$1" == "--help"; then
+    echo "Использование:";
+    echo -e "./dumpCleaner [\033[32minput file\033[0m] [\033[33mclear flags\033[0m]";
+    echo "Флаги:"
+    echo "-nc, --no-copy             : Изменить выбранный файл напрямую";
+    echo "-re, --remove-empty        : Удалить лишние пустые строки (2 и более подряд)";
+    exit;
+fi
+
+
+if test "$1" == ""; then
+    echo -e "[ \033[31mНе выбран файл.\033[0m Попробуйте \"dumpCleaner inputFile.txt\" ]";
+    exit;
+else
+    if test -e "$1"; then
+        test;
+    else
+        echo "[ \033[31mФайл не найден:\033[0m \"$1\" ]";
+        echo "[ Попробуйте --help ]"
+        exit;
+    fi
+fi
+
+if [ "$2" == "--remove-empty" ] || [ "$2" == "-re" ] || [ "$3" == "--remove-empty" ] || [ "$3" == "-re" ]; then
+    MUST_REMOVE_DOUBLE_EMPTY_LINES="y";
+fi
+
+if [ "$2" == "--no-copy" ] || [ "$2" == "-nc" ] || [ "$3" == "--no-copy" ] || [ "$3" == "-nc" ]; then
+    OUTPUT_FILE=$INPUT_FILE;
+fi
+
+
+if test "$INPUT_FILE" == "$OUTPUT_FILE"; then
+    echo "[ Файл $INPUT_FILE будет изменён напрямую ]";
+else
+    echo "[ Результат очистки \"$INPUT_FILE\" будет в файле \"$OUTPUT_FILE\" ]";
+    cp $INPUT_FILE "$OUTPUT_FILE";
+fi
+
+
+
+##################################################################
+# CLEARING
+
+echo -en "\033[5m\033[33mВыполняется очистка...\033[0m";
+
+# Remove first garbage lines
+sed '1,7d' -i "$OUTPUT_FILE";
+
+# Remove system comments (most usless)
+sed '/^\-\- PostgreSQL database dump.\{0,\}$/d' -i "$OUTPUT_FILE"
+sed '/^\-\- Obtained maclabel.\{1,\}$/d' -i "$OUTPUT_FILE";
+
+# Remove MAC-based strings
+sed '/^MAC.\{0,\}$/d' -i "$OUTPUT_FILE";
+
+# Remove Name-type-schema-owner comments
+sed '/^\-\- Name:.\{1,\}Type:.\{1,\}Schema:.\{1,\} Owner:.\{1,\}$/d' -i "$OUTPUT_FILE";
+sed '/\-\- Data for Name:.\{1,\}Type:.\{1,\}Schema.\{1,\} Owner:.\{1,\}/d' -i "$OUTPUT_FILE";
+
+# Remove empty comments
+sed '/^\-\-$/d' -i "$OUTPUT_FILE";
+
+echo -en "\r\033[K";
+# Remove double empty lines
+if test "y" = "$MUST_REMOVE_DOUBLE_EMPTY_LINES"; then
+    sed '/^$/N;/^\n$/D' -i "$OUTPUT_FILE";
+    echo "[ Лишние пустые строки удалены ]";
+fi;
+echo "";
+
+##################################################################

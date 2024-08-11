@@ -1,0 +1,25 @@
+#! /bin/bash
+
+PROTECT_ARG="+a"
+if [ "$1" == "-r" ]; then
+echo "Protection will be reset"
+PROTECT_ARG="-a"
+TARGET_DIR="$2"
+else
+TARGET_DIR="$1"
+fi
+
+cd $(pwd)
+echo "Setting protection for dir: $TARGET_DIR"
+{
+sudo chattr "$PROTECT_ARG" -V $(find "$TARGET_DIR" -name *.cpp)
+sudo chattr "$PROTECT_ARG" -V $(find "$TARGET_DIR" -name *.h)
+
+sudo chattr "$PROTECT_ARG" -V $(find "$TARGET_DIR" -name *.hpp)
+sudo chattr "$PROTECT_ARG" -V $(find "$TARGET_DIR" -name *.c)
+
+sudo chattr "$PROTECT_ARG" -V $(find "$TARGET_DIR" -name *.pro)
+sudo chattr "$PROTECT_ARG" -V $(find "$TARGET_DIR" -name *.pri)
+} &> "protectedFiles.txt"
+
+echo "Protection set"

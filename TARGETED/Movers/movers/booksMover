@@ -1,0 +1,21 @@
+#! /bin/bash
+
+RESULT_DIR="$2/Books"
+mkdir "$RESULT_DIR"
+
+BOOKTYPES=(
+"pdf"
+"epub"
+"fb2"
+"djvu"
+)
+BOOKTYPES_COUNT=${#BOOKTYPES[@]}
+COUNTER=1;
+
+for t in ${#BOOKTYPES[@]}; do
+echo -en "\r\033[K\033[33m[$COUNTER/$BOOKTYPES_COUNT]Moving $t..."
+((COUNTER++))
+
+mv $(find "$1" -iname *".$t") "$RESULT_DIR" &> "../bookMove.log"
+done
+echo -e "\r\033[K\033[32mComplete\033[0m";

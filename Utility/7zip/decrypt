@@ -1,6 +1,11 @@
 #! /bin/bash
 
+if [ "$1" == "" ]; then
+    echo "Enter target to decrypt"
+    exit 1
+fi
+
 pass="no_pass";
 read -p "Password: " -s pass;
 
-7z x -t7z -p$pass importantDocs.7z;
+7z x -t7z -p$pass $1

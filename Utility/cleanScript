@@ -1,0 +1,6 @@
+#! /bin/bash
+
+# Clean everything in apt
+sudo apt autoclean -y
+sudo apt clean -y
+sudo apt autoremove -y

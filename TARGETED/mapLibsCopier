@@ -1,0 +1,41 @@
+#! /bin/bash
+OUTPUT="OUTPUT/gisdesignerLibs"
+
+LIB_SO_LIST=(
+libqdmapacces.so  libqdmappicex.so  libqdqtmappictr.so libqds57tomap.so
+libqdmapcomm.so   libqdmapqtfrm.so  libqds57setup.so   liblocalization.so
+libqdgdalserv.so  libqdmapedfrm.so  libqdmapscena.so   libqdwmsacces.so
+libqdjpgview.so   libqdmapmath.so   libqdmapselec.so   libmapcomponents.so
+libqdmap3dex.so   libqdmapmtrex.so  libqdmapvecex.so
+libqdmap3dwin.so  libqdmapobj.so    libqdobjnet.so
+)
+
+mkdir "$OUTPUT" &> /dev/null
+
+for lib in ${LIB_SO_LIST[@]}; do
+cp "/usr/lib/$lib" "$OUTPUT" &> /dev/null
+done
+
+echo "Copy .so complete (${#LIB_SO_LIST[@]} files)"
+
+
+LIB_H_LIST=(
+alsapi.h    mapmacro.h  mathapi.h   qdmcompa.h      qdmgsrv.h   qdmrst.h    rstapi.h
+gmlapi.h    mapold.h    mmstruct.h  qdmconv.h       qdmlayr.h   qdmselob.h  s57api.h
+listapi.h   mappicex.h  mtdapi.h    qdmd3d.h        qdmmet.h    qdmselt.h   seekapi.h
+logapi.h    mapprof.h   mtlapi.h    qdmdcmtw.h      qdmmtr.h    qdmsem.h    sitapi.h
+mapapi.h    maprscex.h  mtrapi.h    qdmdgtob.h      qdmnet.h    qdmsite.h   tinapi.h
+mapcreat.h  mapsyst.h   netapi.h    qdmdlist.h      qdmobja.h   qdmtype.h   vecexapi.h
+maperr.rh    maptrace.h  picexprm.h  qdmdprn.h       qdmobj.h    qdmviewa.h  wmsapi.h
+mapfiles.h  maptype.h   qdmact.h    qdmdsel.h       qdmpoina.h  qdmwina.h   xcontext.h
+mapgdiex.h  mapversn.h  qdmactpt.h  qdmdwmspopup.h  qdmpoint.h  qdmwinw.h
+mapgdi.h    mapview.rh   qdmcmp.h    qdmfind.h       qdmrect.h   rscapi.h.
+)
+
+mkdir "$OUTPUT"/include
+for lib in ${LIB_H_LIST[@]}; do
+cp "/usr/include/gisdesigner/$lib" "$OUTPUT"/include &> /dev/null
+done
+
+# cp "/usr/include/gisdesigner" "$OUTPUT" -r &> /dev/null
+echo "Copy .h complete (${#LIB_H_LIST[@]} files)"

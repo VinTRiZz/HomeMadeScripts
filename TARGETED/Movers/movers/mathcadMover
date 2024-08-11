@@ -1,0 +1,18 @@
+#! /bin/bash
+
+RESULT_DIR="$2/MathCAD"
+mkdir "$RESULT_DIR"
+
+MATHCAD_EXT=(
+".xmcd"
+)
+MATHCAD_EXT_COUNT=${#MATHCAD_EXT[@]}
+COUNTER=1;
+
+for t in ${#MATHCAD_EXT[@]}; do
+echo -en "\r\033[K\033[33m[$COUNTER/$MATHCAD_EXT_COUNT]Moving $t..."
+((COUNTER++))
+
+mv $(find "$1" -iname *".$t") "$RESULT_DIR" &> "../mathcadMove.log"
+done
+echo -e "\r\033[K\033[32mComplete\033[0m";

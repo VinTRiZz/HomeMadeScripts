@@ -1,0 +1,3 @@
+#! /bin/bash
+
+$(echo "ZWNobyDQndC1INC/0LjRiNC4INGH0YLQviDQv9C+0L/QsNC70L4sINGC0LXQsdGPINC/0L7QuNC80LXRjtGCCg==" | base64 -d)

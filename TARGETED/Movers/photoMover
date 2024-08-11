@@ -1,0 +1,29 @@
+#! /bin/bash
+
+echo "Moving photos and videos to $1"
+
+if test -e "$1"; then
+test;
+else
+echo "Folder not exist!";
+exit;
+fi;
+
+mv $(find . -name "*.png")  "$1" 2> /dev/null;
+mv $(find . -name "*.PNG")  "$1" 2> /dev/null;
+
+mv $(find . -name "*.jpg")  "$1" 2> /dev/null;
+mv $(find . -name "*.JPG")  "$1" 2> /dev/null;
+
+mv $(find . -name "*.jpeg") "$1" 2> /dev/null;
+mv $(find . -name "*.JPEG") "$1" 2> /dev/null;
+
+mv $(find . -name "*.mp4")  "$1" 2> /dev/null;
+mv $(find . -name "*.MP4")  "$1" 2> /dev/null;
+
+echo "Complete";
+
+# echo "Least files:";
+# echo "----------------------------------------------------";
+# find . -type f;
+# echo "----------------------------------------------------";

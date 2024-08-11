@@ -1,0 +1,75 @@
+#! /bin/bash
+
+clear
+
+SCRIPTPATH=$(dirname "$0")
+RESULT_FILE="$SCRIPTPATH/searchResults.txt"
+
+if [ "$1" == "--help" ]; then
+echo "USAGE:
+finder [dir] [what] [key1 (optional)] [key2 (optional)]
+Keys:
+-of  --only-found   | Print only if found in file
+-s   --silent       | Without output (results in file 
+                      \"$RESULT_FILE\"
+                      )
+"
+fi
+
+if [ -e "$1" ]; then
+test
+else
+echo "Folder \"$1\" not exist"
+exit
+fi
+
+if [ "$2" == "" ]; then
+echo "Empty string to find"
+exit
+fi
+
+ONLY_FOUND="FALSE"
+
+if [ "$3" == "--silent" ] || [ "$3" == "-s" ]; then
+    SILENT="TRUE"
+else
+    if [ "$3" == "--only-found" ] || [ "$3" == "-of" ]; then
+        ONLY_FOUND="TRUE"
+    fi
+fi
+
+if [ "$4" == "--only-found" ] || [ "$4" == "-of" ]; then
+    ONLY_FOUND="TRUE"
+fi
+
+FOUNDS=($(find "$1" -type f))
+FOUND_DATA=""
+
+echo "Searching..."
+echo "" > "$RESULT_FILE"
+{
+for f in ${FOUNDS[@]}; do
+    FOUND_DATA=($(cat "$f" | grep "$2"))
+    
+    if [ "$SILENT" != "TRUE" ] && [ "$ONLY_FOUND" != "TRUE" ]; then
+    echo -n "Checking file: $f"
+    fi
+    
+    if (( ${#FOUND_DATA[@]} != 0 )); then
+        {
+            echo "------------------------------------------------------"
+        } 1>> "$RESULT_FILE"
+        
+        echo "[FOUND: \"$1\" IN FILE: \"$f\"]" 1>> "$RESULT_FILE"
+        
+        if [ "$SILENT" != "TRUE" ]; then
+        echo -en "\r\033[KChecking file: $f [\033[32mFOUND\033[0m]\n"
+        fi
+    else
+        if [ "$SILENT" != "TRUE" ] && [ "$ONLY_FOUND" != "TRUE" ]; then
+        echo -en "\r\033[KChecking file: $f [\033[31mNOT FOUND\033[0m]\n"
+        fi
+    fi
+done
+} 2>/dev/null
+echo "Complete"

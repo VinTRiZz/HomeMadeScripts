@@ -1,0 +1,34 @@
+#! /bin/bash
+clear
+
+if [ -e "$1" ] && [ -e "$2" ]; then
+echo -e "\033[32mExistance check passed. Moving...\033[0m";
+else
+echo -e "\033[31mERROR:\033[0m One of dirs does not exist!"
+exit 1
+fi
+
+ANSWER="n"
+MOVEALL="n"
+if [ "$3" == "-a" ] || [ "$3" == "--all" ]; then
+MOVEALL="y"
+ANSWER="y"
+fi
+
+SCRIPTS=(
+$(ls movers)
+)
+SCRIPT_COUNT=${#SCRIPTS[@]}
+COUNTER=1;
+
+for scr in ${SCRIPTS[@]}; do
+if [ "$MOVEALL" != "y" ]; then
+read -p "[$COUNTER/$SCRIPT_COUNT] Use script $scr ? [y/n] " ANSWER
+((COUNTER++))
+fi
+
+if [ "$ANSWER" == "y" ]; then
+"./movers/$scr" "$1"  "$2";
+fi
+
+done
