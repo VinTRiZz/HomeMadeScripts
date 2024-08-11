@@ -10,8 +10,6 @@ BACKUP_BASE_DIR="Backup"
 REPLACED_PREFIX=$(date +%H.%M.%S_%d.%m.20%y)
 BACKUP_DIR="/media/$USERNAME/$BACKUP_DEVICE/$BACKUP_BASE_DIR"
 
-BACKUP_DIR="/home/$USERNAME/Backups/TEST"
-
 echo -e "Backup will be created in:\n[ $BACKUP_DIR ]\n"
 
 DIRECTORIES=(
@@ -27,9 +25,9 @@ COUNTER=1;
 for d in ${DIRECTORIES[@]}; do
     echo -en "\r\033[KCopying dir: $d [\033[33m\033[5mIN PROCESS\033[0m] ($COUNTER / $DIRECTORIES_COUNT)"
     if rsync -avzhu $d "$BACKUP_DIR" --backup-dir="REPLACED/$REPLACED_PREFIX" &> /dev/null; then
-        echo -en "\r\033[KCopying dir: $d [\033[32mSUCCESS\033[0m]\n ($COUNTER / $DIRECTORIES_COUNT)"
+        echo -en "\r\033[KCopying dir: $d [\033[32mSUCCESS\033[0m] ($COUNTER / $DIRECTORIES_COUNT)\n"
     else
-        echo -en "\r\033[KCopying dir: $d [\033[31mERROR\033[0m]\n ($COUNTER / $DIRECTORIES_COUNT)"
+        echo -en "\r\033[KCopying dir: $d [\033[31mERROR\033[0m] ($COUNTER / $DIRECTORIES_COUNT)\n"
     fi
     COUNTER=$(expr $COUNTER + 1)
 done
