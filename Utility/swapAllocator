@@ -1,0 +1,29 @@
+#! /bin/bash
+
+SWAPFILE_SIZE=1
+read -p "Swap file size in Gb: " SWAPFILE_SIZE
+
+
+SWAP_PATH="/home/swapfile"
+if ( expr $SWAPFILE_SIZE + 1 > /dev/null ); then
+
+echo -e "\r\033[KCreating file by path: $SWAP_PATH"
+if ( command -v fallocate ); then
+sudo fallocate -l "$SWAPFILE_SIZE"G "$SWAP_PATH"
+else
+sudo dd if=/dev/zero of="$SWAP_PATH" bs=1G count="$SWAPFILE_SIZE" status=progress
+fi
+
+echo -e "\r\033[KMaking file swap..."
+sudo chmod 600 "$SWAP_PATH"
+sudo mkswap "$SWAP_PATH"
+
+echo -e "\r\033[KEnabling swap..."
+sudo swapon "$SWAP_PATH"
+
+echo "Complete"
+
+else
+echo "Invalid input: must be a number"
+exit 1
+fi
