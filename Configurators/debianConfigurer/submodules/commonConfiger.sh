@@ -19,10 +19,11 @@ read -p "Write your email for github: " GITHUB_MAIL
 if [ "$GITHUB_MAIL" == "" ]; then
 echo "Invalid email (empty). Email set and keygen skipped"
 else
-echo "Setting up email"
+echo "Setting up email to $GITHUB_MAIL"
+su - "$USERNAME_NR" -c "git config --global user.email \"$GITHUB_MAIL\""
 git config --global user.email "$GITHUB_MAIL"
 echo "Generating keys"
-ssh-keygen -t ed25519 -C "$GITHUB_MAIL"
+su - "$USERNAME_NR" ssh-keygen -t ed25519 -C "$GITHUB_MAIL"
 echo "Complete"
 fi
 
@@ -30,8 +31,8 @@ read -p "Write your username for github: " GITHUB_USERNAME
 if [ "$GITHUB_MAIL" == "" ]; then
 echo "Invalid username (empty). Username skipped"
 else
-echo "Setting up username"
-git config --global user.name "$GITHUB_USERNAME"
+echo "Setting up username to $GITHUB_USERNAME"
+su - "$USERNAME_NR" -c "git config --global user.name \"$GITHUB_USERNAME\""
 echo "Complete"
 fi
 

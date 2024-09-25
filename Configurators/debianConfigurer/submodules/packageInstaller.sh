@@ -19,6 +19,11 @@ cmake
 libboost-all-dev
 linux-headers-$(uname -r)
 
+# For ossec
+libssl-dev
+libcrypto++-dev
+libpcre2-dev
+
 # Coding
 qtcreator
 codeblocks-contrib
